@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>Stardew Valley - 生日特别版</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Press Start 2P', 'Courier New', monospace;
+            background: #000;
+            color: white;
+            overflow-x: hidden;
+            height: 100%;
+            cursor: pointer;
+        }
+
+        .video-container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: black;
+        }
+
+        #intro-video {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            background: black;
+        }
+
+        #load-image-btn {
+            display: none;
+            cursor: pointer;
+            border-radius: 6px;
+            transition: transform 0.1s;
+            user-select: none;
+            /* 👇 修改此处：让按钮在手机上自适应 */
+            width: min(200px, 40vw);
+            max-width: 90vw;
+            position: absolute;
+            /* 👇 修改此处：底部留更多空间，适配手机安全区 */
+            bottom: 20%;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10;
+            padding: 8px;
+        }
+
+        #load-image-btn:hover,
+        #load-image-btn:active {
+            transform: translateX(-50%) translateY(2px);
+        }
+
+        ::-webkit-scrollbar { display: none; }
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    </style>
+
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+</head>
+<body>
+<button onclick="testPlay()" style="
+    position: fixed; top: 20px; left: 20px; z-index: 9999;
+    padding: 10px 20px; font-size: 16px; background: red; color: white;
+">🔊 强制播放音乐</button>
+
+<audio id="bg-music" preload="auto" loop>
+    <source src="music.mp3" type="audio/mpeg">
+</audio>
+
+<div class="video-container">
+    <video
+            id="intro-video"
+            src="video.mp4"
+            autoplay
+            muted
+            playsinline
+            webkit-playsinline
+            onended="showLoadImage()"
+            onerror="showLoadImage()"
+    ></video>
+    <img
+            id="load-image-btn"
+            src="load-btn.png"
+            alt="加载"
+            onclick="enterBlackScreen()"
+    >
+</div>
+
+<div id="black-screen" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:black; z-index:100;">
+    <img src="birth.png" alt="生日快乐" style="position:absolute; bottom:35px; left:20px; width:28%;">
+</div>
+
+<audio id="ding-sound" preload="auto">
+    <source src="data:audio/mpeg;base64,SUQzBAAAAAABEVRYWFgAAAAtAAADY29tbWVudABCaWdTb3VuZEJhbmsuY29tIC8gTGFTb25vdGhlcXVlLm9yZwBURU5DAAAAHQAAA1N3aXRjaCBQbHVzIMKpIE5DSCBTb2Z0d2FyZQBUSVQyAAAABgAAAzIyMzUAVFNTRQAAAA8AAANMYXZmNTcuODMuMTAwAAAAAAAAAAAAAAD/80DEAAAAA0gAAAAATEFNRTMuMTAwVVVVVVVVVVVVVUxBTUUzLjEwMFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVf/zQsRbAAADSAAAAABVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVf/zQMSkAAADSAAAAABVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV" type="audio/mpeg">
+</audio>
+
+<div id="final-bg-layer" style="
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('background.png');
+    background-size: cover;
+    background-position: center;
+    z-index: 199;
+    pointer-events: none;
+"></div>
+
+<div id="final-content" style="
+    display: none;
+    position: relative;
+    z-index: 200;
+    padding: 40px 20px;
+    min-height: 100vh;
+    width: 100%;
+">
+    <div style="
+        width: 60%;
+        aspect-ratio: 16 / 9;
+        border: 6px solid #d35400;
+        box-shadow:
+            inset 0 0 0 2px #f39c12,
+            0 0 0 4px #a03e00,
+            0 0 12px rgba(243, 156, 18, 0.6);
+        overflow: hidden;
+        border-radius: 4px;
+        margin: 0 auto 30px;
+    ">
+        <video
+                src="birth-video.mp4"
+                autoplay
+                muted
+                playsinline
+                webkit-playsinline
+                style="width:100%; height:100%; display:block;"
+        ></video>
+    </div>
+
+    <img
+            src="letter.png"
+            alt="给你的一封信"
+            style="
+            width: 54%;
+            max-width: 700px;
+            display: block;
+            margin: 70px auto 0;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.5);
+            border-radius: 4px;
+        "
+    >
+</div>
+
+<script>
+    let musicPlayed = false;
+
+    function playMusic() {
+        if (musicPlayed) return;
+        const bgMusic = document.getElementById('bg-music');
+        if (!bgMusic) return;
+        bgMusic.volume = 0.5;
+        bgMusic.play().then(() => {
+            musicPlayed = true;
+            document.body.style.cursor = 'default'; // 播了就恢复默认光标
+        }).catch(e => console.log("播放失败", e));
+    }
+
+    function showLoadImage() {
+        document.getElementById('load-image-btn').style.display = 'block';
+    }
+
+    function enterBlackScreen() {
+        playMusic(); // 点按钮也触发
+        document.getElementById('load-image-btn').style.display = 'none';
+        const blackScreen = document.getElementById('black-screen');
+        blackScreen.style.display = 'block';
+
+        setTimeout(() => {
+            const ding = document.getElementById('ding-sound');
+            ding.currentTime = 0;
+            ding.play().catch(e => console.log("ding 音效失败", e));
+        }, 1000);
+
+        setTimeout(() => {
+            blackScreen.style.display = 'none';
+            document.getElementById('final-bg-layer').style.display = 'block';
+            document.getElementById('final-content').style.display = 'block';
+            document.querySelector('.video-container').style.display = 'none';
+        }, 3000);
+    }
+
+    // 👇 关键：用户点击页面任意处 → 播放音乐
+    document.body.addEventListener('click', playMusic);
+    document.body.addEventListener('touchstart', playMusic);
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const video = document.getElementById('intro-video');
+        video.play().catch(e => console.warn("视频自动播放被阻止", e));
+    });
+</script>
+
+</body>
+</html>
